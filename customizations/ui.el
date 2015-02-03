@@ -6,18 +6,11 @@
 
 ;; Turn off the menu bar at the top of each frame because it's distracting
 (menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
 
 ;; Show line numbers
 (global-linum-mode)
-
-;; You can uncomment this to remove the graphical toolbar at the top. After
-;; awhile, you won't need the toolbar.
-;; (when (fboundp 'tool-bar-mode)
-;;   (tool-bar-mode -1))
-
-;; Don't show native OS scroll bars for buffers because they're redundant
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
 
 ;; Color Themes
 ;; Read http://batsov.com/articles/2012/02/19/color-theming-in-emacs-reloaded/
@@ -26,7 +19,7 @@
 ;; for a more technical explanation.
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
-(load-theme 'tomorrow-night-bright t)
+(load-theme 'tomorrow-night t)
 
 ;; increase font size for better readability
 (set-face-attribute 'default nil :height 140)
@@ -56,6 +49,9 @@
       ;; Mouse yank commands yank at point instead of at click.
       mouse-yank-at-point t)
 
+(delete-selection-mode t)
+(transient-mark-mode t)
+
 ;; No cursor blinking, it's distracting
 (blink-cursor-mode 0)
 
@@ -67,3 +63,25 @@
 
 ;; no bell
 (setq ring-bell-function 'ignore)
+
+;; Font Settings
+
+(when window-system
+  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  (set-face-attribute 'default nil
+                      :family "Source Code Pro for Powerline"
+                      :height 140
+                      :weight 'normal
+                      :width 'normal)
+
+  (when (functionp 'set-fontset-font)
+    (set-fontset-font "fontset-default"
+                      'unicode
+                      (font-spec :family "DejaVu Sans Mono"
+                                 :width 'normal
+                                 :size 12.4
+                                 :weight 'normal))))
+
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
