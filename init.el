@@ -2,6 +2,12 @@
 ;; Packages
 ;;;;
 
+(setq user-full-name "Steve Kinney")
+(setq user-mail-address "hello@stevekinney.net")
+
+(setenv "PATH" (concat "/usr/local/bin:/opt/local/bin:/usr/bin:/bin" (getenv "PATH")))
+(require 'cl)
+
 ;; Define package repositories
 (require 'package)
 (add-to-list 'package-archives
@@ -11,62 +17,70 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
-;;                          ("melpa" . "http://melpa-stable.milkbox.net/packages/")))
+(setq package-archive-enable-alist '(("melpa" deft magit)))
 
+;; My list of packages:
+
+(defvar stevekinney/packages '(ac-slime
+                          auto-complete
+                          autopair
+                          clojure-mode
+                          clojure-test-mode
+                          coffee-mode
+                          deft
+                          erlang
+                          feature-mode
+                          flycheck
+                          gist
+                          go-mode
+                          graphviz-dot-mode
+                          haml-mode
+                          haskell-mode
+                          htmlize
+                          magit
+                          markdown-mode
+                          marmalade
+                          nodejs-repl
+                          o-blog
+                          org
+                          paredit
+                          puppet-mode
+                          rainbow-delimiters
+                          restclient
+                          rvm
+                          smex
+                          sml-mode
+                          solarized-theme
+                          web-mode
+                          writegood-mode
+                          yaml-mode
+                          yasnippet
+                          )
+  "Default packages")
 
 ;; Load and activate emacs packages. Do this first so that the
 ;; packages are loaded before you start trying to modify them.
 ;; This also sets the load path.
+
 (package-initialize)
 
-;; Download the ELPA archive description if needed.
-;; This informs Emacs about the latest versions of all packages, and
-;; makes them available for download.
-(when (not package-archive-contents)
-  (package-refresh-contents))
+; (defun stevekinney/packages-installed-p ()
+;   (loop for pkg in stevekinney/packages
+;         when (not (package-installed-p pkg)) do (return nil)
+;         finally (return t)))
+;
+; (unless (stevekinney/packages-installed-p)
+;   (message "%s" "Refreshing package database...")
+;   (package-refresh-contents)
+;   (dolist (pkg stevekinney/packages)
+;     (when (not (package-installed-p pkg))
+;       (package-install pkg))))
 
-;; The packages you want installed. You can also install these
-;; manually with M-x package-install
-;; Add in your own as you wish:
-(defvar my-packages
-  '(;; makes handling lisp expressions much, much easier
-    ;; Cheatsheet: http://www.emacswiki.org/emacs/PareditCheatsheet
-    paredit
+;; Supress splash screen
 
-    ;; key bindings and code colorization for Clojure
-    ;; https://github.com/clojure-emacs/clojure-mode
-    clojure-mode
-
-    ;; extra syntax highlighting for clojure
-    clojure-mode-extra-font-locking
-
-    ;; integration with a Clojure REPL
-    ;; https://github.com/clojure-emacs/cider
-    cider
-
-    ;; allow ido usage in as many contexts as possible. see
-    ;; customizations/better-defaults.el line 47 for a description
-    ;; of ido
-    ido-ubiquitous
-
-    ;; Enhances M-x to allow easier execution of commands. Provides
-    ;; a filterable list of possible commands in the minibuffer
-    ;; http://www.emacswiki.org/emacs/Smex
-    smex
-
-    ;; project navigation
-    projectile
-
-    ;; colorful parenthesis matching
-    rainbow-delimiters
-
-    ;; edit html tags like sexps
-    tagedit
-
-    ;; git integration
-    magit))
+(setq inhibit-splash-screen t
+      initial-scratch-message nil
+      initial-major-mode 'org-mode)
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
@@ -76,12 +90,12 @@
 ;; This library works around this problem by copying important
 ;; environment variables from the user's shell.
 ;; https://github.com/purcell/exec-path-from-shell
-(if (eq system-type 'darwin)
-    (add-to-list 'my-packages 'exec-path-from-shell))
-
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+; (if (eq system-type 'darwin)
+;     (add-to-list 'my-packages 'exec-path-from-shell))
+;
+; (dolist (p my-packages)
+;   (when (not (package-installed-p p))
+;     (package-install p)))
 
 
 ;; Place downloaded elisp files in ~/.emacs.d/vendor. You'll then be able
@@ -92,7 +106,7 @@
 ;;
 ;; (require 'yaml-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;; 
+;;
 ;; Adding this code will make Emacs enter yaml mode whenever you open
 ;; a .yml file
 (add-to-list 'load-path "~/.emacs.d/vendor")
@@ -130,6 +144,9 @@
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
+(load "setup-ruby.el")
+(load "setup-web.el")
+(load "setup-markdown.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -137,3 +154,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(coffee-tab-width 2))
+
+ ;; Textmate-style Snippets
+
+ (add-to-list 'load-path
+               "~/.emacs.d/plugins/yasnippet")
+ (require 'yasnippet)
+ (yas-global-mode 1)
