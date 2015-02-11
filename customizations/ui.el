@@ -1,9 +1,3 @@
-;; These customizations change the way emacs looks and disable/enable
-;; some user interface elements. Some useful customizations are
-;; commented out, and begin with the line "CUSTOMIZE". These are more
-;; a matter of preference and may require some fiddling to match your
-;; preferences
-
 ;; Turn off the menu bar at the top of each frame because it's distracting
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -24,10 +18,18 @@
 ;; increase font size for better readability
 (set-face-attribute 'default nil :height 140)
 
+;; Line number customizations
+(setq linum-format "%d ")
+(set-face-attribute 'linum nil :foreground "#AAA")
+(set-face-attribute 'fringe nil :background "#282a2e")
+(set-face-attribute 'linum nil :background "#010101")
+(set-face-attribute 'linum nil :italic nil)
+(set-face-attribute 'linum nil :weight 'normal)
+
 ;; Uncomment the lines below by removing semicolons and play with the
 ;; values in order to set the width (in characters wide) and height
 ;; (in lines high) Emacs will have whenever you start it
-;; (setq initial-frame-alist '((top . 0) (left . 0) (width . 177) (height . 53)))
+(setq initial-frame-alist '((top . 2) (left . 2) (width . 90) (height . 30)))
 
 ;; These settings relate to how emacs interacts with your operating system
 (setq ;; makes killing/yanking interact with the clipboard
@@ -85,3 +87,15 @@
 (setq-default indicate-empty-lines t)
 (when (not indicate-empty-lines)
   (toggle-indicate-empty-lines))
+
+;; Use special indenting
+(require 'adaptive-wrap)
+(add-hook 'visual-line-mode-hook 'adaptive-wrap-prefix-mode) 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ ;; '(adaptive-wrap-extra-indent 2)
+                                        ; ...
+ )

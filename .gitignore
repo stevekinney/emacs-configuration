@@ -9,3 +9,7 @@ auto-save-list
 backups
 elpa
 *archive-contents
+ido.*
+*~
+.#*
+games/bubbles-default-2-10-10-scores
